@@ -17,7 +17,7 @@ unsigned long getTime() {
 }
 
 // send an NTP request to the time server at the given address
-unsigned long sendNTPrequest(IPAddress& address)
+void sendNTPrequest(IPAddress& address)
 {
   memset(buffer, 0, BUFFER_SIZE);
   // Initialize values needed to form NTP request

@@ -5,7 +5,7 @@ void setup(void) {
 
   Serial.begin(115200);
   Serial.println();
-  Serial.println("Pool 2017-11-07");
+  Serial.println("Solar panel monitor  29 June 2018");
   Serial.print("\n\nConnecting to ");
   Serial.println(ssid);
   WiFi.config(ip, gateway, subnet, dns);
@@ -33,6 +33,7 @@ void setup(void) {
   // Set epoch and timers
   getTime();
   setTime(startSeconds);
+  Serial.println(timeStamp());
   //setTime(23,59,30,23,1,2017);
   startMillis = millis();
   oldMin = minute();
@@ -53,6 +54,9 @@ void setup(void) {
   Serial.print(fs_info.usedBytes);
   Serial.println(" bytes used:");
 
+  fd=SPIFFS.open("/diags.txt","a");
+  fe=SPIFFS.open("/errmess.txt","a");
+
   diagMess(" restart");
 
   server.on ( "/", handleMetrics );
@@ -62,7 +66,8 @@ void setup(void) {
 	Serial.println( "HTTP server started" );
   server.handleClient();
 
-  i2c_init();   // ultrasonic transducer is on an I2C bus at address 8
+  ads.setGain(GAIN_TWO);        // 2x gain   +/- 2.048V  1 bit = 1mV      0.0625mV
+  ads.begin();                  // ads is on an I2C bus at address 48
 }
 
 void loop(void) {
@@ -73,11 +78,20 @@ void loop(void) {
   //  check for web requests
   server.handleClient();
   // handle background
-  yield();
+  delay(1000);
   // poll probes
   scan1wire();
   // query water level
-  readLevel();
+//  readLevel();
   // check for OTA
   ArduinoOTA.handle();
+  // read ads1115
+  adc0 = ads.readADC_SingleEnded(0);
+  adc1 = ads.readADC_SingleEnded(1);
+  adc2 = ads.readADC_SingleEnded(2);
+  adc3 = ads.readADC_SingleEnded(3);
+  Serial.print("AIN0: "); Serial.print(adc0);
+  Serial.print("  AIN1: "); Serial.print(adc1);
+  Serial.print("  AIN2: "); Serial.print(adc2);
+  Serial.print("  AIN3: "); Serial.println(adc3);
 }

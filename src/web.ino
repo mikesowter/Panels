@@ -2,20 +2,17 @@
 
 void handleMetrics() {
   htmlStr[0]='\0';
-  addCstring("# TYPE spPoolTemp guage" );
-  addCstring("\nspPoolTemp ");
+  addCstring("\n# TYPE pmProbe1 guage" );
+  addCstring("\npmProbe1 ");
   addCstring(p8d(lastTemp[0]));
-  addCstring("\n# TYPE spPumpTemp guage" );
-  addCstring("\nspPumpTemp ");
+  addCstring("\n# TYPE pmProbe2 guage" );
+  addCstring("\npmProbe2 ");
   addCstring(p8d(lastTemp[1]));
-  addCstring("\n# TYPE spAirTemp guage" );
-  addCstring("\nspAirTemp ");
+  addCstring("\n# TYPE pmProbe3 guage" );
+  addCstring("\npmProbe3 ");
   addCstring(p8d(lastTemp[2]));
-  addCstring("\n# TYPE spWaterLevel guage" );
-  addCstring("\nspWaterLevel ");
-  addCstring(p8d(waterLevel));
-  addCstring("\n# TYPE spWifiSignal guage" );
-  addCstring("\nspWifiSignal ");
+  addCstring("\n# TYPE pmWifiSignal guage" );
+  addCstring("\npmWifiSignal ");
   addCstring(p8d(-WiFi.RSSI()));
   addCstring( "\n" );
   server.send ( 200, "text/plain", htmlStr );
@@ -26,6 +23,8 @@ void handleNotFound() {
   Serial.println(userText);
   if (strncmp(userText,"/reset",6)==0) {
     errMess("User requested restart");
+    fd.close();
+    fe.close();
     ESP.restart();
   }
   else if (strncmp(userText,"/shutdown",9)==0) {
@@ -34,16 +33,16 @@ void handleNotFound() {
     strcpy(outBuf,"<!DOCTYPE html><html><head><HR>Safe to Shutdown<HR></head></html>");
     server.send ( 200, "text/html", outBuf );
   }
-  else if (strncmp(userText,"/remdiags",9)==0) {
+  else if (strncmp(userText,"/deldiags",9)==0) {
     SPIFFS.remove("/diags.txt");
     fd = SPIFFS.open("/diags.txt", "a");
     dateStamp();
     strcpy(outBuf,"<!DOCTYPE html><html><head><HR>Diags deleted<HR></head></html>");
     server.send ( 200, "text/html", outBuf );
   }
-  else if (strncmp(userText,"/remerrs",9)==0) {
+  else if (strncmp(userText,"/delerrs",9)==0) {
     SPIFFS.remove("/errmess.txt");
-    fd = SPIFFS.open("/errmess.txt", "a");
+    fe = SPIFFS.open("/errmess.txt", "a");
     dateStamp();
     strcpy(outBuf,"<!DOCTYPE html><html><head><HR>Errors deleted<HR></head></html>");
     server.send ( 200, "text/html", outBuf );

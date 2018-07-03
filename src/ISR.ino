@@ -6,6 +6,8 @@ void ISRwatchDog () {
   }
   if (watchDog >= 90) {
     errMess("watchDog 90s");
+    fd.close();
+    fe.close();
     ESP.restart();
   }
   interrupts();

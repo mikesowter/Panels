@@ -1,4 +1,4 @@
-float readLevel() {
+/*float readLevel() {
   lastReading = waterLevel;
   i2c_master_read_from(8, reply, 5, FALSE);
   if (reply[0]=='L') {
@@ -12,7 +12,7 @@ float readLevel() {
   }
   if (waterLevel < 1.0 || waterLevel > 39.0) waterLevel=0.0;
 }
-/*
+
 float median() {
   medBuf(medPtr++)=waterLevel;
   medPtr&=0x3F;

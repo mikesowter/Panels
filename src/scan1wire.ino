@@ -2,18 +2,9 @@ void scan1wire() {
   while ( ds.search(addr)) {
 
     if ( OneWire::crc8( addr, 7) != addr[7]) {
-      fe=SPIFFS.open("/scanErrs.txt","a");
-      fe.print("\naddr = ");
-      for ( i = 0; i < 3; i++) {
-        if (addr[i]<16) fe.print("0");
-        fe.print(addr[i], HEX);
-        fe.print(" ");
-      }
-      fe.print("\nbad CRC!\n");
-      fe.close();
+      errMess(" bad CRC!");
       return;
     }
-
     ds.reset();
     ds.select(addr);
     ds.write(0x44,1);        // start conversion, with parasite power on
@@ -31,13 +22,16 @@ void scan1wire() {
 
     for ( i = 0; i < 9; i++) {           // we need 9 bytes
       data[i] = ds.read();
-    /*    if (data[i]<16) Serial.print("0");
+/*      if (data[i]<16) Serial.print("0");
       Serial.print(data[i], HEX);
-      Serial.print(" ");  */
+      Serial.print(" ");    */
     }
+//    Serial.println();
     for (i=0; i < numProbes; i++) {
       if ((addr[1]==(knownAddr[i]>>8)) && (addr[2]==(knownAddr[i]&0xFF))) {
         probe=i;
+        Serial.print(sensors[i]);
+        Serial.print(": ");
       }
     }
     // Convert the data to actual temperature
@@ -67,6 +61,7 @@ void scan1wire() {
       sumTemp[probe] += celsius;
       numSamp[probe] += 1;
     }
+    Serial.println(celsius);
   }
 ds.reset_search();
 return;

@@ -3,7 +3,8 @@
 #endif
 
 #include <One-Wire.h>
-#include "i2c.h"
+#include <Adafruit_ADS1015.h>
+Adafruit_ADS1115 ads;   /* Use this for the 16-bit version */
 #include <TimeLib.h>
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
@@ -41,7 +42,7 @@ char saveName[20];
 char dateStr[] = "yymmdd";
 char timeStr[] = "hh:mm:ss";
 unsigned long getTime();
-unsigned long sendNTPrequest(IPAddress& address);
+void sendNTPrequest(IPAddress& address);
 unsigned long getNTPreply();
 
 //char ssid[] = "ZombiesAteMyBrains";   //  your network SSID (name)
@@ -58,7 +59,7 @@ unsigned long t0, t1, minMillis, startMillis, startSeconds, midNight;
 unsigned int localPort = 2391;   //  a random local port to listen for UDP packets
 
 IPAddress localIP,timeServerIP,fileServerIP;
-IPAddress ip(192, 168, 1, 51);
+IPAddress ip(192, 168, 1, 53);
 IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 255, 0);
 IPAddress dns(192, 168, 1, 1);
@@ -72,25 +73,17 @@ byte buffer[BUFFER_SIZE];
 uint8_t oldMin,oldQtr,oldHour,oldDay,oldMonth;
 uint16_t i,oldYear,qtrPtr,htmlLen,inputPtr,outPtr;
 
-struct minStruct {       // all data are stored as int(100.0*float)
-  uint16_t pool;
-  uint16_t pump;
-  uint16_t air;
-  uint16_t level;
-} Data[NUM_DAYS*96];     // 9 days are necessary to cover a 7.5 day chart
-
 OneWire  ds(12);          // on GPIO12 - pin D6 on d1-mini
 
 uint8_t probe,swimming=1;
 // a little maintenance problem, so don't add probes!
 const uint8_t numProbes = 3;
-char sensors[numProbes][5] = {"pool","pump","air "};
-uint16_t knownAddr[numProbes] = {0xFFAF,0xFF83,0xFFDB};
+char sensors[numProbes][6] = {"one","two","three"};
+uint16_t knownAddr[numProbes] = {0xFF52,0xFF56,0xFFB9};
 float lastTemp[numProbes];
 float avgTemp[numProbes];
 float sumTemp[numProbes];
 uint16_t numSamp[numProbes];
 uint8_t data[12],addr[8];
 float celsius,maxTemp = 0.0;
-float waterLevel,lastReading = 0.0;
-bool FTP_busy = false;
+uint16_t adc0, adc1, adc2, adc3;

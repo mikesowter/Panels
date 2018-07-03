@@ -11,7 +11,7 @@ byte storeData() {
 
 //----------------- open file for reading or appending
 
-byte openFile(char* s) {
+byte openFile(const char* s) {
   fh = SPIFFS.open(fileName, s);
   if (!fh) {
     strcpy(outBuf,fileName);
@@ -32,7 +32,5 @@ void WriteQtr() {
   fh.print(avgTemp[1]);
   fh.print(",");
   fh.print(avgTemp[2]);
-  fh.print(",");
-  fh.println(waterLevel);
   yield();
 }

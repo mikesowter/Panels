@@ -22,15 +22,11 @@ void listFiles() {
 
 uint8_t listDiags() {
   char line[66];
-  int i,j,k;
-  const int DIAG_ROWS = 100;
-  uint32_t ptrs[DIAG_ROWS];
+  int k;
   htmlStr[0]='\0';
   addCstring("<!DOCTYPE html><html><body><HR>");
   fd.close();
   fd = SPIFFS.open("/diags.txt", "r");
-  i=0;
-  uint8_t numRows=0;
 
   while (fd.available()) {
     k=fd.readBytesUntil('\r',line,64);
@@ -54,15 +50,15 @@ void helpPage() {
   addCstring("<P>");
   addCstring("day");
   addCstring("<P>");
+  addCstring("deldiags");
+  addCstring("<P>");
+  addCstring("delerrs");
+  addCstring("<P>");
   addCstring("diags");
   addCstring("<P>");
   addCstring("dir");
   addCstring("<P>");
   addCstring("metrics");
-  addCstring("<P>");
-  addCstring("remdiags");
-  addCstring("<P>");
-  addCstring("remerrs");
   addCstring("<P>");
   addCstring("reset");
   addCstring("<P>");
