@@ -4,7 +4,6 @@
 
 #include <One-Wire.h>
 #include <Adafruit_ADS1015.h>
-Adafruit_ADS1115 ads;   /* Use this for the 16-bit version */
 #include <TimeLib.h>
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
@@ -18,6 +17,7 @@ extern "C" {
 #include "user_interface.h"
 }
 
+String resetReason = ESP.getResetReason();
 const uint8_t NTP_PACKET_SIZE = 48;
 const uint8_t BUFFER_SIZE = 128;
 const uint8_t TIME_ZONE = 10;
@@ -26,6 +26,7 @@ const uint8_t NUM_DAYS = 9;
 const uint16_t HTML_SIZE = 13000;
 const float THE_TEMP = -1.0;
 
+Adafruit_ADS1115 ads;
 ESP8266WebServer server( 80 );
 WiFiUDP udp;
 WiFiClient client,dclient;
@@ -41,13 +42,15 @@ char userText[20];
 char saveName[20];
 char dateStr[] = "yymmdd";
 char timeStr[] = "hh:mm:ss";
+char charBuf[50];
 unsigned long getTime();
 void sendNTPrequest(IPAddress& address);
 unsigned long getNTPreply();
 
-//char ssid[] = "ZombiesAteMyBrains";   //  your network SSID (name)
+//char ssid[] = "ZombiesAteMyBrains";
+//char pass[] = "iron1951";
 char ssid[] = "TelstraCF6EC7";
-char pass[] = "meauff8qqwn9";               //  your network password
+char pass[] = "meauff8qqwn9";
 char d2Str[] = "12";
 char d8Str[] = "12345.78";
 uint8_t Xmit[4] = {1,2,4,8};
@@ -86,4 +89,8 @@ float sumTemp[numProbes];
 uint16_t numSamp[numProbes];
 uint8_t data[12],addr[8];
 float celsius,maxTemp = 0.0;
-uint16_t adc0, adc1, adc2, adc3;
+float amps1,amps2,volts1,volts2;
+const float ampScale1=5.0/(16.0*1024.0);
+const float ampScale2=5.0/(16.0*1024.0);
+const float voltScale1=200.0/(16.0*1024.0);
+const float voltScale2=200.0/(16.0*1024.0);

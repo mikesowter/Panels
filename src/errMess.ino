@@ -41,21 +41,25 @@ char* p2d(byte b) {
 }
 
 // convert float into an 8 char string ddddd.dd
-char* p8d(float f) {
+char* p8d4(float f) {
+  if (f > 999.9999) {
+    diagMess("p8d4 overflow");
+    return (char*)"999.9999";
+  }
   int left = (int)f;
-  int rank = 10000;   //five places left of dp
+  int rank = 100;   //three places left of dp
   byte ptr = 0;
   bool started = false;
-  for ( int n=0;n<5;n++ ) {
-    if ( left/rank != 0 || n==3 ) started = true;
+  for ( int n=0;n<3;n++ ) {
+    if ( left/rank != 0 || n==1 ) started = true;
     if (started) d8Str[ptr++] = left/rank +'0';
     left %= rank;
     rank /= 10;
   }
   d8Str[ptr++] = '.';
-  rank=10;         //two places right of dp
-  int right = (int)(100.0*f)-100*(int)f;
-  for ( int n=0;n<2;n++ ) {
+  rank=1000;         //four places right of dp
+  int right = (int)(10000.0*f)-10000*(int)f;
+  for ( int n=0;n<4;n++ ) {
     d8Str[ptr++] = right/rank +'0';
     right %= rank;
     rank /= 10;

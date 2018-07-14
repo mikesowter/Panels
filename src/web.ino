@@ -4,16 +4,28 @@ void handleMetrics() {
   htmlStr[0]='\0';
   addCstring("\n# TYPE pmProbe1 guage" );
   addCstring("\npmProbe1 ");
-  addCstring(p8d(lastTemp[0]));
+  addCstring(p8d4(lastTemp[0]));
   addCstring("\n# TYPE pmProbe2 guage" );
   addCstring("\npmProbe2 ");
-  addCstring(p8d(lastTemp[1]));
+  addCstring(p8d4(lastTemp[1]));
   addCstring("\n# TYPE pmProbe3 guage" );
   addCstring("\npmProbe3 ");
-  addCstring(p8d(lastTemp[2]));
+  addCstring(p8d4(lastTemp[2]));
+  addCstring("\n# TYPE pmAmps1 guage" );
+  addCstring("\npmAmps1 ");
+  addCstring(p8d4(amps1));
+  addCstring("\n# TYPE pmAmps2 guage" );
+  addCstring("\npmAmps2 ");
+  addCstring(p8d4(amps2));
+  addCstring("\n# TYPE pmVolts1 guage" );
+  addCstring("\npmVolts1 ");
+  addCstring(p8d4(volts1));
+  addCstring("\n# TYPE pmVolts2 guage" );
+  addCstring("\npmVolts2 ");
+  addCstring(p8d4(volts2));
   addCstring("\n# TYPE pmWifiSignal guage" );
   addCstring("\npmWifiSignal ");
-  addCstring(p8d(-WiFi.RSSI()));
+  addCstring(p8d4(-WiFi.RSSI()));
   addCstring( "\n" );
   server.send ( 200, "text/plain", htmlStr );
 }
@@ -48,13 +60,19 @@ void handleNotFound() {
     server.send ( 200, "text/html", outBuf );
   }
   else if (SPIFFS.exists(userText)) {
-    strcpy(outBuf,"<!DOCTYPE html><html><head><HR>Sending File: \"");
-    strcat(outBuf,userText);
-    strcat(outBuf,"\"<HR></head></html>");
-    server.send ( 200, "text/html", outBuf );
-    strcpy(fileName,userText);
-//    uploadFile();
-    delay(5);
+    strcpy(htmlStr,"File: ");
+    addCstring(userText);
+    addCstring("\r\r");
+    fh = SPIFFS.open(userText, "r");
+
+    while (fh.available()) {
+      int k=fh.readBytesUntil('\r',charBuf,80);
+      charBuf[k]='\0';
+      addCstring(charBuf);
+      yield();
+    }
+    fh.close();
+    server.send ( 200, "text/plain", htmlStr );
   }
   else if (strncmp(userText,"/favicon.ico",12)==0) {
   }

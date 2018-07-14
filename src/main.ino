@@ -1,4 +1,4 @@
-#include <panel.h>
+#include <main.h>
 
 void setup(void) {
   secondTick.attach(1,ISRwatchDog);
@@ -57,7 +57,8 @@ void setup(void) {
   fd=SPIFFS.open("/diags.txt","a");
   fe=SPIFFS.open("/errmess.txt","a");
 
-  diagMess(" restart");
+  resetReason.toCharArray(charBuf,resetReason.length()+1);
+	diagMess(charBuf);       // restart message
 
   server.on ( "/", handleMetrics );
   server.on ( "/metrics", handleMetrics );
@@ -66,8 +67,8 @@ void setup(void) {
 	Serial.println( "HTTP server started" );
   server.handleClient();
 
-  ads.setGain(GAIN_TWO);        // 2x gain   +/- 2.048V  1 bit = 1mV      0.0625mV
-  ads.begin();                  // ads is on an I2C bus at address 48
+  ads.setGain(GAIN_TWO);        // 2x gain   +/- 2.048V  1 bit = 0.0625mV
+  ads.begin();                  // ads is on an I2C bus at address 0x48
 }
 
 void loop(void) {
@@ -78,20 +79,34 @@ void loop(void) {
   //  check for web requests
   server.handleClient();
   // handle background
-  delay(1000);
+  yield();
   // poll probes
-  scan1wire();
-  // query water level
-//  readLevel();
+  if (minute()!= oldMin) {
+    scan1wire();
+    oldMin = minute();
+  }
   // check for OTA
   ArduinoOTA.handle();
-  // read ads1115
-  adc0 = ads.readADC_SingleEnded(0);
-  adc1 = ads.readADC_SingleEnded(1);
-  adc2 = ads.readADC_SingleEnded(2);
-  adc3 = ads.readADC_SingleEnded(3);
-  Serial.print("AIN0: "); Serial.print(adc0);
-  Serial.print("  AIN1: "); Serial.print(adc1);
-  Serial.print("  AIN2: "); Serial.print(adc2);
-  Serial.print("  AIN3: "); Serial.println(adc3);
+  // read currents
+  ads.setGain(GAIN_SIXTEEN);    // FS 0.256V @ .025ohm 10A 1 bit = 0.3mA
+  amps1 = ads.readADC_SingleEnded(0)*ampScale1;
+  diag(amps1);
+  amps2 = ads.readADC_SingleEnded(1)*ampScale2;
+  diag(amps1);
+  // read volts
+  ads.setGain(GAIN_TWO);        // FS 2.048V x332k/1k8 360V 1 bit = 1.2mV
+  volts1 = ads.readADC_SingleEnded(2)*voltScale1;
+  diag(volts1);
+  volts2 = ads.readADC_SingleEnded(3)*voltScale2;
+  diag(volts2);
+//  Serial.println();
+  delayMicroseconds(3650);      // rounds up to 40ms total sampling interval
+}
+
+void diag(float val) {
+  return;
+  Serial.print(millis());
+  Serial.print(",");
+  Serial.print(val);
+  Serial.print(", ");
 }
