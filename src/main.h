@@ -47,8 +47,6 @@ unsigned long getTime();
 void sendNTPrequest(IPAddress& address);
 unsigned long getNTPreply();
 
-//char ssid[] = "ZombiesAteMyBrains";
-//char pass[] = "iron1951";
 char ssid[] = "TelstraCF6EC7";
 char pass[] = "meauff8qqwn9";
 char d2Str[] = "12";
@@ -62,7 +60,7 @@ unsigned long t0, t1, minMillis, startMillis, startSeconds, midNight;
 unsigned int localPort = 2391;   //  a random local port to listen for UDP packets
 
 IPAddress localIP,timeServerIP,fileServerIP;
-IPAddress ip(192, 168, 1, 53);
+IPAddress ip(192, 168, 1, 58);
 IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 255, 0);
 IPAddress dns(192, 168, 1, 1);

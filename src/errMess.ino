@@ -40,7 +40,7 @@ char* p2d(byte b) {
   return d2Str;
 }
 
-// convert float into an 8 char string ddddd.dd
+// convert float into an 8 char string ddd.dddd
 char* p8d4(float f) {
   if (f > 999.9999) {
     diagMess("p8d4 overflow");

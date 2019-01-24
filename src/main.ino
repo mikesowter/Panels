@@ -5,7 +5,7 @@ void setup(void) {
 
   Serial.begin(115200);
   Serial.println();
-  Serial.println("Solar panel monitor  29 June 2018");
+  Serial.println("solar panels monitor - 24 Jan 19");
   Serial.print("\n\nConnecting to ");
   Serial.println(ssid);
   WiFi.config(ip, gateway, subnet, dns);
@@ -43,8 +43,8 @@ void setup(void) {
   oldMonth = month();
   oldYear = year();
 
-  //if(!SPIFFS.format()||!SPIFFS.begin())     //use to format SPIFFS drive
-  if(!SPIFFS.begin())
+  if(!SPIFFS.format()||!SPIFFS.begin())     //use to format SPIFFS drive
+  //if(!SPIFFS.begin())
   {
     Serial.println("SPIFFS.begin failed");
   }
