@@ -2,32 +2,66 @@
 
 void handleMetrics() {
   htmlStr[0]='\0';
-  addCstring("\n# TYPE hwProbe1 guage" );
-  addCstring("\nhwProbe1 ");
+/*  addCstring("\n# TYPE soProbe1 guage" );
+  addCstring("\nsoProbe1 ");
   addCstring(p8d4(lastTemp[0]));
-  addCstring("\n# TYPE hwProbe2 guage" );
-  addCstring("\nhwProbe2 ");
+  addCstring("\n# TYPE soProbe2 guage" );
+  addCstring("\nsoProbe2 ");
   addCstring(p8d4(lastTemp[1]));
-  addCstring("\n# TYPE hwProbe3 guage" );
-  addCstring("\nhwProbe3 ");
-  addCstring(p8d4(lastTemp[2]));
-  addCstring("\n# TYPE hwAmps1 guage" );
-  addCstring("\nhwAmps1 ");
-  addCstring(p8d4(amps1));
-  addCstring("\n# TYPE hwAmps2 guage" );
-  addCstring("\nhwAmps2 ");
-  addCstring(p8d4(amps2));
-  addCstring("\n# TYPE hwVolts1 guage" );
-  addCstring("\nhwVolts1 ");
-  addCstring(p8d4(volts1));
-  addCstring("\n# TYPE hwVolts2 guage" );
-  addCstring("\nhwVolts2 ");
-  addCstring(p8d4(volts2));
-  addCstring("\n# TYPE hwWifiSignal guage" );
-  addCstring("\nhwWifiSignal ");
+  addCstring("\n# TYPE soProbe3 guage" );
+  addCstring("\nsoProbe3 ");
+  addCstring(p8d4(lastTemp[2]));  */
+  addCstring("\n# TYPE soA1avg guage" );
+  addCstring("\nsoA1avg ");
+  addCstring(p8d4(A1avg));
+  addCstring("\n# TYPE soA1min guage" );
+  addCstring("\nsoA1min ");
+  addCstring(p8d4(A1min));
+  addCstring("\n# TYPE soA1max guage" );
+  addCstring("\nsoA1max ");
+  addCstring(p8d4(A1max));
+  addCstring("\n# TYPE soA2avg guage" );
+  addCstring("\nsoA2avg ");
+  addCstring(p8d4(A2avg));
+  addCstring("\n# TYPE soA2min guage" );
+  addCstring("\nsoA2min ");
+  addCstring(p8d4(A2min));
+  addCstring("\n# TYPE soA2max guage" );
+  addCstring("\nsoA2max ");
+  addCstring(p8d4(A2max));
+  
+  addCstring("\n# TYPE soV1avg guage" );
+  addCstring("\nsoV1avg ");
+  addCstring(p8d4(V1avg));
+  addCstring("\n# TYPE soV1min guage" );
+  addCstring("\nsoV1min ");
+  addCstring(p8d4(V1min));
+  addCstring("\n# TYPE soV1max guage" );
+  addCstring("\nsoV1max ");
+  addCstring(p8d4(V1max));
+  addCstring("\n# TYPE soV2avg guage" );
+  addCstring("\nsoV2avg ");
+  addCstring(p8d4(V2avg));
+  addCstring("\n# TYPE soV2min guage" );
+  addCstring("\nsoV2min ");
+  addCstring(p8d4(V2min));
+  addCstring("\n# TYPE soV2max guage" );
+  addCstring("\nsoV2max ");
+  addCstring(p8d4(V2max));
+ 
+  addCstring("\n# TYPE soWifiSignal guage" );
+  addCstring("\nsoWifiSignal ");
   addCstring(p8d4(-WiFi.RSSI()));
   addCstring( "\n" );
   server.send ( 200, "text/plain", htmlStr );
+  A1min = amps1;
+  A1max = amps1;
+  A2min = amps2;
+  A2max = amps2;
+  V1min = volts1;
+  V1max = volts1;
+  V2min = volts2;
+  V2max = volts2;
 }
 
 void handleNotFound() {
