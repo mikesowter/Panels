@@ -89,22 +89,26 @@ void loop(void) {
   ArduinoOTA.handle(); 
   // read currents
   amps1 = ads.readADC_SingleEnded(0)*ampScale1;
+  if (amps1 > 100.0) amps1 = 0.0;
   A1min = _min(A1min,amps1);
   A1max = _max(A1max,amps1);
   A1avg = 0.95*A1avg + 0.05*amps1;
   diag(amps1);
   amps2 = ads.readADC_SingleEnded(1)*ampScale2;
+  if (amps2 > 100.0) amps2 = 0.0;
   A2min = _min(A2min,amps2);
   A2max = _max(A2max,amps2);
-  A2avg = 0.95*A2avg + 0.05*amps1;
+  A2avg = 0.95*A2avg + 0.05*amps2;
   diag(amps1);
   // read volts
   volts1 = ads.readADC_SingleEnded(2)*voltScale1;
+  if (volts1 > 20.0) volts1 = 0.0;
   V1min = _min(V1min,volts1);
   V1max = _max(V1max,volts1);
   V1avg = 0.95*V1avg + 0.05*volts1;
   diag(volts1);
   volts2 = ads.readADC_SingleEnded(3)*voltScale2;
+  if (volts2 > 20.0) volts2 = 0.0;
   V2min = _min(V2min,volts2);
   V2max = _max(V2max,volts2);
   V2avg = 0.95*V2avg + 0.05*volts2;
