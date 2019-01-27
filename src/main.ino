@@ -69,6 +69,8 @@ void setup(void) {
 
   ads.setGain(GAIN_SIXTEEN);    // +/- 0.256V  1 bit = 0.008mV
   ads.begin();                  // ads is on an I2C bus at address 0x48
+
+  t1 = micros();  //setup minimum period for first measurement
 }
 
 void loop(void) {
@@ -100,6 +102,11 @@ void loop(void) {
   A2max = _max(A2max,amps2);
   A2avg = 0.95*A2avg + 0.05*amps2;
   diag(amps1);
+  // calc Ah for each panel
+  period = (float)(micros()-t1)/3.6E9;  // expressed in hours
+  t1 = micros();
+  A1hrs += amps1*period;
+  A2hrs += amps2*period;
   // read volts
   volts1 = ads.readADC_SingleEnded(2)*voltScale1;
   if (volts1 > 20.0) volts1 = 0.0;
@@ -114,10 +121,11 @@ void loop(void) {
   V2avg = 0.95*V2avg + 0.05*volts2;
   diag(volts2);
   Serial.println();
-  delay(300);      // rounds up to 40ms total sampling interval
+  delay(3);      // rounds up to 40ms total sampling interval
 }
 
 void diag(float val) {
+  return;
   Serial.print(val);
   Serial.print(", ");
 }

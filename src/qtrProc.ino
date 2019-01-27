@@ -8,7 +8,7 @@ void qtrProc() {
   avgTemp[1] = sumTemp[1]/(float)numSamp[1];
   avgTemp[2] = sumTemp[2]/(float)numSamp[2];  */
 
-  diagMess("qtr processing");
+  //diagMess("qtr processing");
 
   t0=millis();
   watchDog = 0;
@@ -18,9 +18,11 @@ void qtrProc() {
     delay(5000);
     getTime();
     setTime(startSeconds);
-
+    // reset AmpereHours for day
+    A1hrs = 0.0;
+    A2hrs = 0.0;
     // generate new file name for day
-    strcpy(todayName,"/pm");
+    strcpy(todayName,"/so");
     strcat(todayName,p2d(year()%100));
     strcat(todayName,p2d(month()));
     strcat(todayName,p2d(day()));

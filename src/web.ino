@@ -29,7 +29,7 @@ void handleMetrics() {
   addCstring("\n# TYPE soA2max guage" );
   addCstring("\nsoA2max ");
   addCstring(p8d4(A2max));
-  
+
   addCstring("\n# TYPE soV1avg guage" );
   addCstring("\nsoV1avg ");
   addCstring(p8d4(V1avg));
@@ -49,6 +49,13 @@ void handleMetrics() {
   addCstring("\nsoV2max ");
   addCstring(p8d4(V2max));
  
+  addCstring("\n# TYPE soA1hrs guage" );
+  addCstring("\nsoA1hrs ");
+  addCstring(p8d4(A1hrs));
+  addCstring("\n# TYPE soA2hrs guage" );
+  addCstring("\nsoA2hrs ");
+  addCstring(p8d4(A2hrs));
+  
   addCstring("\n# TYPE soWifiSignal guage" );
   addCstring("\nsoWifiSignal ");
   addCstring(p8d4(-WiFi.RSSI()));

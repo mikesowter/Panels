@@ -90,6 +90,7 @@ float celsius,maxTemp = 0.0;
 float amps1,amps2,volts1,volts2;
 float A1min,A1max,A1avg,A2min,A2max,A2avg;
 float V1min,V1max,V1avg,V2min,V2max,V2avg;
+float period,A1hrs,A2hrs = 0.0;
 const float ampScale1=0.003146;
 const float ampScale2=.003065; 
 const float voltScale1=0.00065;
