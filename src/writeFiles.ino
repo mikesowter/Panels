@@ -5,7 +5,6 @@ byte storeData() {
   if ( !openFile("a") ) return 0;
   WriteQtr();
   fh.close();
-  diagMess(fileName);
   return 1;
 }
 
@@ -23,14 +22,25 @@ byte openFile(const char* s) {
 }
 
 void WriteQtr() {
+  fh.println();
   fh.print(p2d(hour()));
   fh.print(":");
   fh.print(p2d(minute()));
   fh.print(",");
-  fh.print(avgTemp[0]);
+  fh.print(A1min);
   fh.print(",");
-  fh.print(avgTemp[1]);
+  fh.print(A1max);
   fh.print(",");
-  fh.print(avgTemp[2]);
+  fh.print(A2min);
+  fh.print(",");
+  fh.print(A2max);
+  fh.print(", "); 
+  fh.print(A1hrs);
+  fh.print(",");
+  fh.print(A2hrs);
+  fh.print(", ");
+  fh.print(V1min);
+  fh.print(",");
+  fh.print(V1max);
   yield();
 }

@@ -5,7 +5,7 @@ void setup(void) {
 
   Serial.begin(115200);
   Serial.println();
-  Serial.println("solar panels monitor - 24 Jan 19");
+  Serial.println("solar panels monitor - 29 Jan 19");
   Serial.print("\n\nConnecting to ");
   Serial.println(ssid);
   WiFi.config(ip, gateway, subnet, dns);
@@ -27,21 +27,11 @@ void setup(void) {
   init_OTA();
 
   udp.begin(localPort);
-  // Resolve servers
+  // Resolve server
   WiFi.hostByName(ntpServerName, timeServerIP);
-  WiFi.hostByName(ftpServerName, fileServerIP);
-  // Set epoch and timers
-  getTime();
-  setTime(startSeconds);
-  Serial.println(timeStamp());
-  //setTime(23,59,30,23,1,2017);
-  startMillis = millis();
-  oldMin = minute();
-  oldQtr = oldMin/15;
-  oldHour = hour();
-  oldDay = day();
-  oldMonth = month();
-  oldYear = year();
+  // Set epoch and timers in qtrproc
+  oldQtr = 99;    // trigger qtrproc
+  oldDay = 99;    // trigger daycalcs
 
   //if(!SPIFFS.format()||!SPIFFS.begin())     //use to format SPIFFS drive
   if(!SPIFFS.begin())
@@ -56,9 +46,6 @@ void setup(void) {
 
   fd=SPIFFS.open("/diags.txt","a");
   fe=SPIFFS.open("/errmess.txt","a");
-
-  resetReason.toCharArray(charBuf,resetReason.length()+1);
-	diagMess(charBuf);       // restart message
 
   server.on ( "/", handleMetrics );
   server.on ( "/metrics", handleMetrics );
@@ -82,11 +69,11 @@ void loop(void) {
   server.handleClient();
   // handle background
   yield();
-  // poll probes
+  /* poll temperature probes
   if (minute()!= oldMin) {
-  //  scan1wire();
+    scan1wire();
     oldMin = minute();
-  }
+  } */
   // check for OTA
   ArduinoOTA.handle(); 
   // read currents

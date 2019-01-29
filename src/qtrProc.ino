@@ -1,23 +1,14 @@
 // end of quarter processing
 
 void qtrProc() {
-
-/*  if (numSamp[0] < 3) return;  // for boot too close to quarter change
-//  average readings
-  avgTemp[0] = sumTemp[0]/(float)numSamp[0];
-  avgTemp[1] = sumTemp[1]/(float)numSamp[1];
-  avgTemp[2] = sumTemp[2]/(float)numSamp[2];  */
-
-  //diagMess("qtr processing");
-
-  t0=millis();
-  watchDog = 0;
-  yield();
-
+  // here on restart and quarter hour
   if ( day() != oldDay ) {
-    delay(5000);
     getTime();
     setTime(startSeconds);
+    if (hour() != 0) {   // restart 
+      resetReason.toCharArray(charBuf,resetReason.length()+1);
+      diagMess(charBuf);       
+    }
     // reset AmpereHours for day
     A1hrs = 0.0;
     A2hrs = 0.0;
@@ -27,12 +18,13 @@ void qtrProc() {
     strcat(todayName,p2d(month()));
     strcat(todayName,p2d(day()));
     strcat(todayName,".csv");
-//    storeData();
     // update month and year
     oldYear = year();
     oldMonth = month();
     oldDay = day();
   }
+  storeData();
+  oldMin = minute();
   oldHour = hour();
   oldQtr = minute()/15;
   // flush fault files

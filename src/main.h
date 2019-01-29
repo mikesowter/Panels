@@ -56,7 +56,7 @@ uint8_t reply[6];
 uint8_t medPtr=0;
 float medBuf[64]={0.0};
 
-unsigned long t0, t1, minMillis, startMillis, startSeconds, midNight;
+unsigned long t0, t1, startSeconds;
 unsigned int localPort = 2391;   //  a random local port to listen for UDP packets
 
 IPAddress localIP,timeServerIP,fileServerIP;
@@ -65,7 +65,6 @@ IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 255, 0);
 IPAddress dns(192, 168, 1, 1);
 const char* ntpServerName = "au.pool.ntp.org";
-const char* ftpServerName = "ftp.sowter.com";
 char titleData[60];
 char htmlStr[HTML_SIZE];            // use C strings for storage efficiency
 char outBuf[128];                   // for ftpRcv and errMessage
@@ -74,8 +73,8 @@ byte buffer[BUFFER_SIZE];
 uint8_t oldMin,oldQtr,oldHour,oldDay,oldMonth;
 uint16_t i,oldYear,qtrPtr,htmlLen,inputPtr,outPtr;
 
+/* for temperature measurement
 OneWire  ds(12);          // on GPIO12 - pin D6 on d1-mini
-
 uint8_t probe,swimming=1;
 // a little maintenance problem, so don't add probes!
 const uint8_t numProbes = 3;
@@ -86,11 +85,12 @@ float avgTemp[numProbes];
 float sumTemp[numProbes];
 uint16_t numSamp[numProbes];
 uint8_t data[12],addr[8];
-float celsius,maxTemp = 0.0;
+float celsius,maxTemp = 0.0;  */
+
 float amps1,amps2,volts1,volts2;
 float A1min,A1max,A1avg,A2min,A2max,A2avg;
 float V1min,V1max,V1avg,V2min,V2max,V2avg;
-float period,A1hrs,A2hrs = 0.0;
+float period,A1hrs,A2hrs;
 const float ampScale1=0.003146;
 const float ampScale2=.003065; 
 const float voltScale1=0.00065;

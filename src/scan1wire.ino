@@ -1,3 +1,4 @@
+/*
 void scan1wire() {
   while ( ds.search(addr)) {
 
@@ -22,9 +23,9 @@ void scan1wire() {
 
     for ( i = 0; i < 9; i++) {           // we need 9 bytes
       data[i] = ds.read();
-/*      if (data[i]<16) Serial.print("0");
+      if (data[i]<16) Serial.print("0");
       Serial.print(data[i], HEX);
-      Serial.print(" ");    */
+      Serial.print(" ");    
     }
 //    Serial.println();
     for (i=0; i < numProbes; i++) {
@@ -66,3 +67,4 @@ void scan1wire() {
 ds.reset_search();
 return;
 }
+*/
