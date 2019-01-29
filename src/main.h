@@ -8,6 +8,7 @@
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #include <ESP8266WebServer.h>
+#include <ESP8266FtpServer.h>
 #include <WiFiUdp.h>
 #include <fs.h>
 #include <ESP8266mDNS.h>
@@ -28,6 +29,7 @@ const float THE_TEMP = -1.0;
 
 Adafruit_ADS1115 ads;
 ESP8266WebServer server( 80 );
+FtpServer ftpSrv;
 WiFiUDP udp;
 WiFiClient client,dclient;
 time_t getNtpTime();

@@ -53,6 +53,8 @@ void setup(void) {
 	server.begin();
 	Serial.println( "HTTP server started" );
   server.handleClient();
+  // setup FTP server
+	ftpSrv.begin("mike","iron");
 
   ads.setGain(GAIN_SIXTEEN);    // +/- 0.256V  1 bit = 0.008mV
   ads.begin();                  // ads is on an I2C bus at address 0x48
@@ -67,6 +69,8 @@ void loop(void) {
   if ( minute()/15 != oldQtr ) qtrProc();
   //  check for web requests
   server.handleClient();
+  // check for FTP request
+	ftpSrv.handleFTP();
   // handle background
   yield();
   /* poll temperature probes
